@@ -6,34 +6,39 @@ export const cartSlice = createSlice({
   },
   reducers: {
     add: (state, action) => {
-        let isAlreadyinCart=false;
-        state.value.map((item) => {
-            if (item.id === action.payload.id) {
-                isAlreadyinCart=true;
-              item.qty += 1;
-            }
-          });
-          if(!isAlreadyinCart) {
-              state.value.push(action.payload);
-          }
-
-      
+      let isAlreadyinCart = false;
+      state.value.map((item) => {
+        if (item.id === action.payload.id) {
+          isAlreadyinCart = true;
+          item.qty += 1;
+        }
+      });
+      if (!isAlreadyinCart) {
+        state.value.push(action.payload);
+      }
     },
     remove: (state, action) => {
-      const newState=state.filter((item) => item.id !== action.payload);
-      state=newState;
+      const newState = state.value.filter((item) => item.id !== action.payload);
+      state.value = newState;
     },
     oneMore: (state, action) => {
-      state.map((item) => {
+      state.value.map((item) => {
         if (item.id === action.payload) {
           item.qty += 1;
         }
       });
     },
     oneLess: (state, action) => {
-      state.map((item) => {
+      state.value.map((item) => {
         if (item.id === action.payload) {
-          item.qty -= 1;
+          if (item.qty === 1) {
+            const newState = state.value.filter(
+              (item) => item.id !== action.payload
+            );
+            state.value = newState;
+          } else {
+            item.qty -= 1;
+          }
         }
       });
     },

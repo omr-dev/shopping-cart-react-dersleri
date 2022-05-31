@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
-import { selectCart } from "../cartSlice";
+import { selectCart, remove, oneMore, oneLess } from "../cartSlice";
 
 const Cart = () => {
-  const cartInRedux = useSelector(selectCart);
-  console.log("cartInRedux", cartInRedux);
+  const booksInCart = useSelector(selectCart);
+  const dispatch = useDispatch();
 
   return (
     <div>
@@ -15,23 +15,42 @@ const Cart = () => {
       </h2>
 
       <h3>Toplam Sepet Tutarı: &#8378;19.99</h3>
-
-      <div className="book">
-        <img
-          src="https://images-na.ssl-images-amazon.com/images/I/51eqjXwFzwL._SX344_BO1,204,203,200_.jpg"
-          alt="Simyacı"
-        />
-        <div>
-          <h4>Simyaci</h4>
-          <p>Yazar: Paulo Coelho</p>
-          <p>Fiyat: &#8378;19.99</p>
-          <p>Toplam: &#8378;19.99</p>
-          <p>Sepetinizde bu kitaptan toplam 1 adet var.</p>
-          <button>-</button>
-          <button>Sepetten Çıkar</button>
-          <button>+</button>
-        </div>
-      </div>
+      {booksInCart.map((book, index) => {
+        return (
+          <div className="book" key={index}>
+            <img src={book.image} alt={book.title} />
+            <div>
+              <h4>{book.title}</h4>
+              <p>Yazar: {book.price}</p>
+              <p>Fiyat: &#8378;{book.price}</p>
+              <p>Toplam: &#8378;{book.price * book.qty}</p>
+              <p>Sepetinizde bu kitaptan toplam {book.qty} adet var.</p>
+              <button
+                disabled={book.qty < 2}
+                onClick={() => {
+                  dispatch(oneLess(book.id));
+                }}
+              >
+                -
+              </button>
+              <button
+                onClick={() => {
+                  dispatch(remove(book.id));
+                }}
+              >
+                Sepetten Çıkar
+              </button>
+              <button
+                onClick={() => {
+                  dispatch(oneMore(book.id));
+                }}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
