@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { selectCart } from "../cartSlice";
 
 const Cart = () => {
+  const cartInRedux = useSelector(selectCart);
+  console.log("cartInRedux", cartInRedux);
+
   return (
     <div>
       <h2>

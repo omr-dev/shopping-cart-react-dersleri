@@ -8,6 +8,7 @@ import Cart from "./components/Cart";
 import { data } from "./data";
 
 export default function App() {
+  
   return (
     <div className="App">
       <h1>
